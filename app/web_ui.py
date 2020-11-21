@@ -28,9 +28,7 @@ class MainHandler(tornado.web.RequestHandler):
                 "<strong>Price:</strong> " + p["variants"][0]["price"] + "<br />"
             )
             self.write(
-                "<strong>Qty:</strong> "
-                + str(p["variants"][0]["inventory_quantity"])
-                + "<br />"
+                "<strong>Qty:</strong> " + str(p["variants"][0]["inventory_quantity"])
             )
             self.write("</li>")
         self.write("</ul>")
