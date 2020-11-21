@@ -16,7 +16,7 @@ class MainHandler(tornado.web.RequestHandler):
         self.write("<h1>Checks</h1>")
         self.write("<ul>")
         self.write(
-            '<li>The weight of all active products is between 3 and 6 kg: <a href="/checks/product-weight">run check</a></li>'
+            '<li>The weight of all active products is between 0.3 and 6.0 kg: <a href="/checks/product-weight">run check</a></li>'
         )
         self.write("</ul>")
 
@@ -41,6 +41,7 @@ class ProductsHandler(tornado.web.RequestHandler):
             self.write(
                 "<strong>Qty:</strong> " + str(p["variants"][0]["inventory_quantity"])
             )
+            self.write("<strong>Weight:</strong> " + str(p["variants"][0]["weight"]))
             self.write("</li>")
         self.write("</ul>")
 
@@ -48,12 +49,12 @@ class ProductsHandler(tornado.web.RequestHandler):
 class ActiveProductsWeight(tornado.web.RequestHandler):
     def get(self):
         products = list(get_all_products(api_url, api_key, api_password))
-        products_outside_range = get_products_outside_range(products, 3.0, 6.0)
+        products_outside_range = get_products_outside_range(products, 0.3, 6.0)
 
         if len(products_outside_range) > 0:
             self.write('<p>Check status: <span style="color: red">failed</span></p>')
             self.write(
-                "<p>Products whose weight is outside the expected range (3.0 - 6.0 kg):</p>"
+                "<p>Products whose weight is outside the expected range (0.3 - 6.0 kg):</p>"
             )
             self.write("<ul>")
             for p_handle, v_id, v_weight in products_outside_range:
@@ -66,7 +67,7 @@ class ActiveProductsWeight(tornado.web.RequestHandler):
         else:
             self.write('<p>Check status: <span style="color: green">passed</span></p>')
             self.write(
-                '<p style="color: green">All products are in the expected range (3.0 - 6.0 kg).</p>'
+                '<p style="color: green">All products are in the expected range (0.3 - 6.0 kg).</p>'
             )
 
 
