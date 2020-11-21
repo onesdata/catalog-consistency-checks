@@ -16,7 +16,7 @@ class MainHandler(tornado.web.RequestHandler):
         self.write("<h1>Checks</h1>")
         self.write("<ul>")
         self.write(
-            '<li><a href="/checks/product-weight">The weight of all active products is between 3 and 6 kg</a></li>'
+            '<li>The weight of all active products is between 3 and 6 kg: <a href="/checks/product-weight">run check</a></li>'
         )
         self.write("</ul>")
 
@@ -51,12 +51,20 @@ class ActiveProductsWeight(tornado.web.RequestHandler):
         products_outside_range = get_products_outside_range(products, 3.0, 6.0)
 
         if len(products_outside_range) > 0:
+            self.write('<p>Check status: <span style="color: red">failed</span></p>')
             self.write(
-                '<p style="color: red">Products whose weight is outside the expected range (3.0 - 6.0 kg): {0}</p>'.format(
-                    products_outside_range
-                )
+                "<p>Products whose weight is outside the expected range (3.0 - 6.0 kg):</p>"
             )
+            self.write("<ul>")
+            for p_handle, v_id, v_weight in products_outside_range:
+                self.write(
+                    "<li>Product handle: {0}, Variant id: {1}, Variant weight: {2}</li>".format(
+                        p_handle, v_id, v_weight
+                    )
+                )
+            self.write("</ul>")
         else:
+            self.write('<p>Check status: <span style="color: green">passed</span></p>')
             self.write(
                 '<p style="color: green">All products are in the expected range (3.0 - 6.0 kg).</p>'
             )
