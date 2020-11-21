@@ -5,12 +5,23 @@ import tornado.ioloop
 import tornado.web
 from tornado.options import define, options
 
+from checks import get_products_outside_range
 from shopify_api import get_all_products
 
 define("port", default=8000, help="run on the given port", type=int)
 
 
 class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write("<h1>Checks</h1>")
+        self.write("<ul>")
+        self.write(
+            '<li><a href="/checks/product-weight">The weight of all active products is between 3 and 6 kg</a></li>'
+        )
+        self.write("</ul>")
+
+
+class ProductsHandler(tornado.web.RequestHandler):
     def get(self):
         products = list(
             get_all_products(
@@ -34,6 +45,23 @@ class MainHandler(tornado.web.RequestHandler):
         self.write("</ul>")
 
 
+class ActiveProductsWeight(tornado.web.RequestHandler):
+    def get(self):
+        products = list(get_all_products(api_url, api_key, api_password))
+        products_outside_range = get_products_outside_range(products, 3.0, 6.0)
+
+        if len(products_outside_range) > 0:
+            self.write(
+                '<p style="color: red">Products whose weight is outside the expected range (3.0 - 6.0 kg): {0}</p>'.format(
+                    products_outside_range
+                )
+            )
+        else:
+            self.write(
+                '<p style="color: green">All products are in the expected range (3.0 - 6.0 kg).</p>'
+            )
+
+
 if __name__ == "__main__":
     env = os.environ
     api_url: str = env["APP_API_URL"]
@@ -42,7 +70,11 @@ if __name__ == "__main__":
 
     tornado.options.parse_command_line()
     application = tornado.web.Application(
-        [(r"/", MainHandler)],
+        [
+            (r"/", MainHandler),
+            (r"/checks/product-weight", ActiveProductsWeight),
+            (r"/products", ProductsHandler),
+        ],
         api_url=api_url,
         api_key=api_key,
         api_password=api_password,
