@@ -36,4 +36,8 @@ APP_API_KEY=$(cat in/APP_API_KEY) \
 env/bin/python app/shopify_api.py
 ```
 
+## Heroku deploy
 
+The web app is available at https://catalog-consistency-checks.herokuapp.com/
+
+It is an application based on `heroku/python` buildpack whose environment can be configured by running `make set_heroku_config_vars` and for now the deploy is manual, executed by @valentinboyanov
