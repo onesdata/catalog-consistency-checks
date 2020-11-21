@@ -10,7 +10,8 @@ def get_products_outside_range(
 
     res: List[Tuple[str, str, str]] = []
 
-    for p in products:
+    active_products = [p for p in products if p["status"] == "active"]
+    for p in active_products:
         for v in p["variants"]:
             if v["weight"] > max_weight_kg or v["weight"] < min_weight_kg:
                 res.append((p["handle"], v["id"], v["weight"]))
