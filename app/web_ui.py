@@ -3,14 +3,17 @@ import os
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
+from tornado.options import define, options
 
-import shopify_api
+from shopify_api import get_all_products
+
+define("port", default=8000, help="run on the given port", type=int)
 
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         products = list(
-            shopify_api.get_all_products(
+            get_all_products(
                 self.settings["api_url"],
                 self.settings["api_key"],
                 self.settings["api_password"],
@@ -20,7 +23,13 @@ class MainHandler(tornado.web.RequestHandler):
             self.write(str(p["id"]))
 
 
-def main(api_url: str, api_key: str, api_password: str):
+if __name__ == "__main__":
+    env = os.environ
+    api_url: str = env["APP_API_URL"]
+    api_key: str = env["APP_API_KEY"]
+    api_password: str = env["APP_API_PASSWORD"]
+
+    tornado.options.parse_command_line()
     application = tornado.web.Application(
         [(r"/", MainHandler)],
         api_url=api_url,
@@ -28,14 +37,5 @@ def main(api_url: str, api_key: str, api_password: str):
         api_password=api_password,
     )
     http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(8000)
+    http_server.listen(options.port)
     tornado.ioloop.IOLoop.current().start()
-
-
-if __name__ == "__main__":
-    env = os.environ
-    api_url: str = env["APP_API_URL"]
-    api_key: str = env["APP_API_KEY"]
-    api_password: str = env["APP_API_PASSWORD"]
-
-    main(api_url, api_key, api_password)

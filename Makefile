@@ -31,6 +31,12 @@ test: check
 clean:
 	rm -rf env env_ok
 
+set_heroku_config_vars: in
+	heroku config:set --app=catalog-consistency-checks \
+	APP_API_URL=$$(cat in/APP_API_URL) \
+	APP_API_PASSWORD=$$(cat in/APP_API_PASSWORD) \
+	APP_API_KEY=$$(cat in/APP_API_KEY) \
+
 gather_creds:
 	mkdir -p in
 	echo "https://hack-friday.myshopify.com/admin/api/2020-10" > in/APP_API_URL
