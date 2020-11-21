@@ -3,6 +3,21 @@ from typing import List, Tuple
 
 from shopify_api import get_all_products
 
+
+def get_products_outside_range(
+    products: List, min_weight_kg: float, max_weight_kg: float
+) -> List[Tuple[str, str, str]]:
+
+    res: List[Tuple[str, str, str]] = []
+
+    for p in products:
+        for v in p["variants"]:
+            if v["weight"] > max_weight_kg or v["weight"] < min_weight_kg:
+                res.append((p["handle"], v["id"], v["weight"]))
+
+    return res
+
+
 if __name__ == "__main__":
     env = os.environ
     api_url: str = env["APP_API_URL"]
@@ -10,23 +25,11 @@ if __name__ == "__main__":
     api_password: str = env["APP_API_PASSWORD"]
 
     products = list(get_all_products(api_url, api_key, api_password))
-    variants: List[Tuple[str, str, float]] = []
-
-    for p in products:
-        for v in p["variants"]:
-            variants.append((p["handle"], v["id"], v["weight"]))
-
-    min_weight_kg: float = 3.0
-    max_weight_kg: float = 6.0
-
-    products_outside_range: List = []
-    for handle, id, weight in variants:
-        if weight > max_weight_kg or weight < min_weight_kg:
-            products_outside_range.append((handle, id, weight))
+    products_outside_range = get_products_outside_range(products, 3.0, 6.0)
 
     if len(products_outside_range) > 0:
         raise Exception(
-            "Products whose weight is outside the expected range ({0} - {1} kg): {2}".format(
-                min_weight_kg, max_weight_kg, products_outside_range
+            "Products whose weight is outside the expected range (3.0 - 6.0 kg): {0}".format(
+                products_outside_range
             )
         )
