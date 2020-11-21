@@ -1,0 +1,5 @@
+env
+env_ok
+__pycache__
+.~lock*
+in
