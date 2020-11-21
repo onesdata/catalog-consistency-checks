@@ -30,3 +30,9 @@ test: check
 .PHONY: clean
 clean:
 	rm -rf env env_ok
+
+set_heroku_config_vars: in
+	heroku config:set --app=catalog-consistency-checks \
+	APP_API_URL=$$(cat in/APP_API_URL) \
+	APP_API_PASSWORD=$$(cat in/APP_API_PASSWORD) \
+	APP_API_KEY=$$(cat in/APP_API_KEY) \
