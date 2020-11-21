@@ -36,3 +36,9 @@ set_heroku_config_vars: in
 	APP_API_URL=$$(cat in/APP_API_URL) \
 	APP_API_PASSWORD=$$(cat in/APP_API_PASSWORD) \
 	APP_API_KEY=$$(cat in/APP_API_KEY) \
+
+gather_creds:
+	mkdir -p in
+	echo "https://hack-friday.myshopify.com/admin/api/2020-10" > in/APP_API_URL
+	echo "08189d71376d02872a66bdc51446a789" > in/APP_API_KEY
+	echo "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" > in/APP_API_PASSWORD
