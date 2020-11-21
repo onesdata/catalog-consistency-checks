@@ -52,6 +52,15 @@ You can run the web application locally by following the instructions here: [Run
     env/bin/python app/shopify_api.py
     ```
 
+## Check active product weight
+
+```
+APP_API_URL=$(cat in/APP_API_URL) \
+APP_API_PASSWORD=$(cat in/APP_API_PASSWORD) \
+APP_API_KEY=$(cat in/APP_API_KEY) \
+env/bin/python app/checks.py
+```
+
 ## Heroku deploy
 
 The web app is available at https://catalog-consistency-checks.herokuapp.com/
