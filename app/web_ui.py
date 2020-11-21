@@ -19,8 +19,19 @@ class MainHandler(tornado.web.RequestHandler):
                 self.settings["api_password"],
             )
         )
+        self.write("<ul>")
         for p in products:
-            self.write(str(p["id"]))
+            self.write("<li>")
+            self.write("<strong>Product:</strong> " + p["title"] + "<br />")
+            self.write("<strong>SKU:</strong> " + p["variants"][0]["sku"] + "<br />")
+            self.write(
+                "<strong>Price:</strong> " + p["variants"][0]["price"] + "<br />"
+            )
+            self.write(
+                "<strong>Qty:</strong> " + str(p["variants"][0]["inventory_quantity"])
+            )
+            self.write("</li>")
+        self.write("</ul>")
 
 
 if __name__ == "__main__":
