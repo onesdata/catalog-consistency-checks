@@ -11,8 +11,21 @@ The purpose of the app is to help store managers know as soon as possible the in
 
 ## Usage
 
+* `make check` sets working env with requirements
+* `make gather_creds` sets remote Shopify credentials
 * `make test` runs tests
 * `make fmt` runs formatters
+
+## Run web server
+
+```
+APP_API_URL=$(cat in/APP_API_URL) \
+APP_API_PASSWORD=$(cat in/APP_API_PASSWORD) \
+APP_API_KEY=$(cat in/APP_API_KEY) \
+env/bin/python app/web_ui.py
+```
+
+Access server from your browser at: http://127.0.0.7:8000/
 
 ## Get all products
 
@@ -23,11 +36,4 @@ APP_API_KEY=$(cat in/APP_API_KEY) \
 env/bin/python app/shopify_api.py
 ```
 
-## Run web server
 
-```
-APP_API_URL=$(cat in/APP_API_URL) \
-APP_API_PASSWORD=$(cat in/APP_API_PASSWORD) \
-APP_API_KEY=$(cat in/APP_API_KEY) \
-env/bin/python app/web_ui.py
-```
