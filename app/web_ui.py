@@ -11,21 +11,50 @@ from shopify_api import get_all_products
 define("port", default=8000, help="run on the given port", type=int)
 
 
+def write_css(self):
+    self.write(
+        "<style>\
+            body { \
+                font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;\
+                font-size: 14px;\
+                } \
+            h1 {\
+                font-size: 28px;\
+                font-weight: 600;\
+            }\
+            a {\
+                text-decoration: none;\
+            }\
+            a:hover {\
+                text-decoration: underline;\
+            }\
+            ul {\
+                list-style: disclosure-closed;\
+            }\
+            li {\
+                margin-bottom: 14px;\
+            }\
+            </style>"
+    )
+
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
+        write_css(self)
         self.write("<h1>Checks</h1>")
         self.write("<ul>")
         self.write(
-            '<li>The weight of all active products is between 0.3 and 6.0 kg: <a href="/checks/product-weight">run check</a></li>'
+            '<li>The weight of all active products is between 0.3 and 6.0 kg: <a href="/checks/product-weight"><strong>run check</strong></a></li>'
         )
         self.write(
-            '<li>All active products have at least 3 images: <a href="/checks/product-images">run check</a></li>'
+            '<li>All active products have at least 3 images: <a href="/checks/product-images"><strong>run check</strong></a></li>'
         )
         self.write("</ul>")
 
 
 class ProductsHandler(tornado.web.RequestHandler):
     def get(self):
+        write_css(self)
         products = list(
             get_all_products(
                 self.settings["api_url"],
@@ -42,15 +71,19 @@ class ProductsHandler(tornado.web.RequestHandler):
                 "<strong>Price:</strong> " + p["variants"][0]["price"] + "<br />"
             )
             self.write(
-                "<strong>Qty:</strong> " + str(p["variants"][0]["inventory_quantity"])
+                "<strong>Qty:</strong> "
+                + str(p["variants"][0]["inventory_quantity"])
+                + "<br />"
             )
             self.write("<strong>Weight:</strong> " + str(p["variants"][0]["weight"]))
             self.write("</li>")
         self.write("</ul>")
+        self.write('<a href="/">Back</a>')
 
 
 class ActiveProductsWeight(tornado.web.RequestHandler):
     def get(self):
+        write_css(self)
         products = list(get_all_products(api_url, api_key, api_password))
         products_outside_range = get_products_outside_range(products, 0.3, 6.0)
 
@@ -73,9 +106,12 @@ class ActiveProductsWeight(tornado.web.RequestHandler):
                 '<p style="color: green">All products are in the expected range (0.3 - 6.0 kg).</p>'
             )
 
+        self.write('<a href="/">Back</a>')
+
 
 class ActiveProductsImages(tornado.web.RequestHandler):
     def get(self):
+        write_css(self)
         products = list(get_all_products(api_url, api_key, api_password))
         products_few_images = get_products_with_insufficient_images(products, 3)
 
@@ -95,6 +131,8 @@ class ActiveProductsImages(tornado.web.RequestHandler):
             self.write(
                 '<p style="color: green">All active products have at least 3 images.</p>'
             )
+
+        self.write('<a href="/">Back</a>')
 
 
 if __name__ == "__main__":
