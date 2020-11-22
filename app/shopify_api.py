@@ -1,4 +1,5 @@
 import base64
+import json
 import os
 import re
 from typing import Any, Dict, Iterable, Optional
@@ -60,4 +61,4 @@ if __name__ == "__main__":
 
     products = list(get_all_products(api_url, api_key, api_password))
 
-    print(products)
+    print(json.dumps(products, indent=4, sort_keys=True))

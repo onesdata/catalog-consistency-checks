@@ -58,7 +58,16 @@ You can run the web application locally by following the instructions here: [Run
 APP_API_URL=$(cat in/APP_API_URL) \
 APP_API_PASSWORD=$(cat in/APP_API_PASSWORD) \
 APP_API_KEY=$(cat in/APP_API_KEY) \
-env/bin/python app/checks.py
+env/bin/python app/checks.py products-weight
+```
+
+## Check active products images
+
+```
+APP_API_URL=$(cat in/APP_API_URL) \
+APP_API_PASSWORD=$(cat in/APP_API_PASSWORD) \
+APP_API_KEY=$(cat in/APP_API_KEY) \
+env/bin/python app/checks.py products-images
 ```
 
 ## Heroku deploy
