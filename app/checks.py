@@ -20,6 +20,20 @@ def get_products_outside_range(
     return res
 
 
+def get_products_with_insufficient_images(
+    products: List, min_image_num: int
+) -> List[Tuple[str, int]]:
+    res: List[Tuple[str, int]] = []
+
+    active_products = [p for p in products if p["status"] == "active"]
+    for p in active_products:
+        images_num = len(p["images"])
+        if images_num < min_image_num:
+            res.append((p["handle"], images_num))
+
+    return res
+
+
 if __name__ == "__main__":
     env = os.environ
 
@@ -29,7 +43,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("check", choices=["products-weight"])
+    parser.add_argument("check", choices=["products-weight", "products-images"])
 
     args = parser.parse_args()
 
@@ -43,5 +57,15 @@ if __name__ == "__main__":
                     products_outside_range
                 )
             )
+    elif args.check == "products-images":
+        products = list(get_all_products(api_url, api_key, api_password))
+        products_few_images = get_products_with_insufficient_images(products, 5)
+
+        if len(products_few_images) > 0:
+            raise Exception(
+                "Active products that have less than 3 images: {0}".format(
+                    products_few_images
+                )
+            )
     else:
-        raise Exception("cmd not implemented: {0}".format(args.cmd))
+        raise Exception("check not implemented: {0}".format(args.check))

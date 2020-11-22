@@ -61,6 +61,15 @@ APP_API_KEY=$(cat in/APP_API_KEY) \
 env/bin/python app/checks.py products-weight
 ```
 
+## Check active products images
+
+```
+APP_API_URL=$(cat in/APP_API_URL) \
+APP_API_PASSWORD=$(cat in/APP_API_PASSWORD) \
+APP_API_KEY=$(cat in/APP_API_KEY) \
+env/bin/python app/checks.py products-images
+```
+
 ## Heroku deploy
 
 The web app is available at https://catalog-consistency-checks.herokuapp.com/
