@@ -5,7 +5,7 @@ import tornado.ioloop
 import tornado.web
 from tornado.options import define, options
 
-from checks import get_products_outside_range
+from checks import get_products_outside_range, get_products_with_insufficient_images
 from shopify_api import get_all_products
 
 define("port", default=8000, help="run on the given port", type=int)
@@ -17,6 +17,9 @@ class MainHandler(tornado.web.RequestHandler):
         self.write("<ul>")
         self.write(
             '<li>The weight of all active products is between 0.3 and 6.0 kg: <a href="/checks/product-weight">run check</a></li>'
+        )
+        self.write(
+            '<li>All active products have at least 3 images: <a href="/checks/product-images">run check</a></li>'
         )
         self.write("</ul>")
 
@@ -71,6 +74,29 @@ class ActiveProductsWeight(tornado.web.RequestHandler):
             )
 
 
+class ActiveProductsImages(tornado.web.RequestHandler):
+    def get(self):
+        products = list(get_all_products(api_url, api_key, api_password))
+        products_few_images = get_products_with_insufficient_images(products, 3)
+
+        if len(products_few_images) > 0:
+            self.write('<p>Check status: <span style="color: red">failed</span></p>')
+            self.write("<p>Active products that have less than 3 images:</p>")
+            self.write("<ul>")
+            for handle, images_num in products_few_images:
+                self.write(
+                    "<li>Product handle: {0}, Images num: {1}</li>".format(
+                        handle, images_num
+                    )
+                )
+            self.write("</ul>")
+        else:
+            self.write('<p>Check status: <span style="color: green">passed</span></p>')
+            self.write(
+                '<p style="color: green">All active products have at least 3 images.</p>'
+            )
+
+
 if __name__ == "__main__":
     env = os.environ
     api_url: str = env["APP_API_URL"]
@@ -82,6 +108,7 @@ if __name__ == "__main__":
         [
             (r"/", MainHandler),
             (r"/checks/product-weight", ActiveProductsWeight),
+            (r"/checks/product-images", ActiveProductsImages),
             (r"/products", ProductsHandler),
         ],
         api_url=api_url,
