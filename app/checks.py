@@ -1,3 +1,4 @@
+import argparse
 import os
 from typing import List, Tuple
 
@@ -21,16 +22,26 @@ def get_products_outside_range(
 
 if __name__ == "__main__":
     env = os.environ
+
     api_url: str = env["APP_API_URL"]
     api_key: str = env["APP_API_KEY"]
     api_password: str = env["APP_API_PASSWORD"]
 
-    products = list(get_all_products(api_url, api_key, api_password))
-    products_outside_range = get_products_outside_range(products, 3.0, 6.0)
+    parser = argparse.ArgumentParser()
 
-    if len(products_outside_range) > 0:
-        raise Exception(
-            "Products whose weight is outside the expected range (3.0 - 6.0 kg): {0}".format(
-                products_outside_range
+    parser.add_argument("check", choices=["products-weight"])
+
+    args = parser.parse_args()
+
+    if args.check == "products-weight":
+        products = list(get_all_products(api_url, api_key, api_password))
+        products_outside_range = get_products_outside_range(products, 0.3, 6.0)
+
+        if len(products_outside_range) > 0:
+            raise Exception(
+                "Products whose weight is outside the expected range (0.3 - 6.0 kg): {0}".format(
+                    products_outside_range
+                )
             )
-        )
+    else:
+        raise Exception("cmd not implemented: {0}".format(args.cmd))
