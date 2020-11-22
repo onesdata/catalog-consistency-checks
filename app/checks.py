@@ -59,7 +59,7 @@ if __name__ == "__main__":
             )
     elif args.check == "products-images":
         products = list(get_all_products(api_url, api_key, api_password))
-        products_few_images = get_products_with_insufficient_images(products, 5)
+        products_few_images = get_products_with_insufficient_images(products, 3)
 
         if len(products_few_images) > 0:
             raise Exception(
