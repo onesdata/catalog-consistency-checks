@@ -93,10 +93,10 @@ class ActiveProductsWeight(tornado.web.RequestHandler):
                 "<p>Products whose weight is outside the expected range (0.3 - 6.0 kg):</p>"
             )
             self.write("<ul>")
-            for p_handle, v_id, v_weight in products_outside_range:
+            for p_handle, v_id, v_weight, p_id in products_outside_range:
                 self.write(
-                    "<li>Product handle: {0}, Variant id: {1}, Variant weight: {2}</li>".format(
-                        p_handle, v_id, v_weight
+                    "<li>Product handle: <a target='_parent' href='https://hack-friday.myshopify.com/admin/products/{3}'>{0}</a>, Variant id: {1}, Variant weight: {2}</li>".format(
+                        p_handle, v_id, v_weight, p_id
                     )
                 )
             self.write("</ul>")
@@ -119,10 +119,10 @@ class ActiveProductsImages(tornado.web.RequestHandler):
             self.write('<p>Check status: <span style="color: red">failed</span></p>')
             self.write("<p>Active products that have less than 3 images:</p>")
             self.write("<ul>")
-            for handle, images_num in products_few_images:
+            for handle, images_num, p_id in products_few_images:
                 self.write(
-                    "<li>Product handle: {0}, Images num: {1}</li>".format(
-                        handle, images_num
+                    "<li>Product handle: <a target='_parent' href='https://hack-friday.myshopify.com/admin/products/{2}'>{0}</a>, Images num: {1}</li>".format(
+                        handle, images_num, p_id
                     )
                 )
             self.write("</ul>")
