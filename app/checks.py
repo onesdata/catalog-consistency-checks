@@ -7,29 +7,29 @@ from shopify_api import get_all_products
 
 def get_products_outside_range(
     products: List, min_weight_kg: float, max_weight_kg: float
-) -> List[Tuple[str, str, str]]:
+) -> List[Tuple[str, str, str, str]]:
 
-    res: List[Tuple[str, str, str]] = []
+    res: List[Tuple[str, str, str, str]] = []
 
     active_products = [p for p in products if p["status"] == "active"]
     for p in active_products:
         for v in p["variants"]:
             if v["weight"] > max_weight_kg or v["weight"] < min_weight_kg:
-                res.append((p["handle"], v["id"], v["weight"]))
+                res.append((p["handle"], v["id"], v["weight"], p["id"]))
 
     return res
 
 
 def get_products_with_insufficient_images(
     products: List, min_image_num: int
-) -> List[Tuple[str, int]]:
-    res: List[Tuple[str, int]] = []
+) -> List[Tuple[str, int, str]]:
+    res: List[Tuple[str, int, str]] = []
 
     active_products = [p for p in products if p["status"] == "active"]
     for p in active_products:
         images_num = len(p["images"])
         if images_num < min_image_num:
-            res.append((p["handle"], images_num))
+            res.append((p["handle"], images_num, p["id"]))
 
     return res
 
