@@ -23,6 +23,29 @@ class MainHandler(tornado.web.RequestHandler):
         )
         self.write("</ul>")
 
+        self.write("<style>\
+            body { \
+                font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;\
+                font-size: 14px;\
+                } \
+            h1 {\
+                font-size: 28px;\
+                font-weight: 600;\
+            }\
+            a {\
+                text-decoration: none;\
+            }\
+            a:hover {\
+                text-decoration: underline;\
+            }\
+            ul {\
+                list-style: none;\
+            }\
+            li {\
+                margin-bottom: 20px;\
+            }\
+            </style>")
+
 
 class ProductsHandler(tornado.web.RequestHandler):
     def get(self):
@@ -42,11 +65,35 @@ class ProductsHandler(tornado.web.RequestHandler):
                 "<strong>Price:</strong> " + p["variants"][0]["price"] + "<br />"
             )
             self.write(
-                "<strong>Qty:</strong> " + str(p["variants"][0]["inventory_quantity"])
+                "<strong>Qty:</strong> " + str(p["variants"][0]["inventory_quantity"]) + "<br />"
             )
             self.write("<strong>Weight:</strong> " + str(p["variants"][0]["weight"]))
             self.write("</li>")
-        self.write("</ul>")
+        self.write("</ul>")        
+        self.write('<a href="/">Back</a>')
+
+        self.write("<style>\
+            body { \
+                font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;\
+                font-size: 14px;\
+                } \
+            h1 {\
+                font-size: 28px;\
+                font-weight: 600;\
+            }\
+            a {\
+                text-decoration: none;\
+            }\
+            a:hover {\
+                text-decoration: underline;\
+            }\
+            ul {\
+                list-style: none;\
+            }\
+            li {\
+                margin-bottom: 20px;\
+            }\
+            </style>")
 
 
 class ActiveProductsWeight(tornado.web.RequestHandler):
@@ -73,6 +120,30 @@ class ActiveProductsWeight(tornado.web.RequestHandler):
                 '<p style="color: green">All products are in the expected range (0.3 - 6.0 kg).</p>'
             )
 
+        self.write('<a href="/">Back</a>')
+
+        self.write("<style>\
+            body { \
+                font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;\
+                font-size: 14px;\
+                } \
+            h1 {\
+                font-size: 28px;\
+                font-weight: 600;\
+            }\
+            a {\
+                text-decoration: none;\
+            }\
+            a:hover {\
+                text-decoration: underline;\
+            }\
+            ul {\
+                list-style: none;\
+            }\
+            li {\
+                margin-bottom: 20px;\
+            }\
+            </style>")
 
 class ActiveProductsImages(tornado.web.RequestHandler):
     def get(self):
@@ -95,6 +166,31 @@ class ActiveProductsImages(tornado.web.RequestHandler):
             self.write(
                 '<p style="color: green">All active products have at least 3 images.</p>'
             )
+
+        self.write('<a href="/">Back</a>')
+        
+        self.write("<style>\
+            body { \
+                font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;\
+                font-size: 14px;\
+                } \
+            h1 {\
+                font-size: 28px;\
+                font-weight: 600;\
+            }\
+            a {\
+                text-decoration: none;\
+            }\
+            a:hover {\
+                text-decoration: underline;\
+            }\
+            ul {\
+                list-style: none;\
+            }\
+            li {\
+                margin-bottom: 20px;\
+            }\
+            </style>")
 
 
 if __name__ == "__main__":
