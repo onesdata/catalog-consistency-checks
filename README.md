@@ -82,4 +82,4 @@ You can run the web application locally by following the instructions here: [Run
 
 The web app is available at https://catalog-consistency-checks.herokuapp.com/
 
-It is an application based on `heroku/python` buildpack whose environment can be configured by running `make set_heroku_config_vars` and for now the deploy is manual, executed by @valentinboyanov
+It is an application based on `heroku/python` buildpack whose environment can be configured by running `make set_heroku_config_vars` and for now the deploy is manual, executed by [@valentinboyanov](https://github.com/valentinboyanov)
